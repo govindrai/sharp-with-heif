@@ -7,5 +7,5 @@ Work in Progress
 # one-liner to build and run 
 
 ```bash
-docker build --progress plain -t sharp:test . && docker rm -f stupid-container && docker run -d --name stupid-container sharp:test && docker exec -it stupid-container npm test
+docker build --progress plain -t sharp:test . && docker rm -f sharp-container && docker run -d --name sharp-container sharp:test && docker exec -it sharp-container npm test
 ```
