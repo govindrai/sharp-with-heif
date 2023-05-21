@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "us-east-1",
+            "eventTime": "2023-05-11T15:35:29.766Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "AWS:AIDAZ3IPSYMZYP3HX6THA"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "73.71.195.234"
+            },
+            "responseElements": {
+                "x-amz-request-id": "60G74AZQ7J27V3JF",
+                "x-amz-id-2": "Qi0WuWkxSUhdi8s7TBFqOpz334859kDg5UAB04gJFoxuHjLF7wsbq4UotQxGvHhiMZWr/62qv6B78QE51CinPnqVcC6Zn0/OTt/H8S1COyM="
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "1c200327-4f85-41b4-b492-65c79814ab4b",
+                "bucket": {
+                    "name": "data.madronus.com",
+                    "ownerIdentity": {
+                        "principalId": "A321BCR1IPLC2L"
+                    },
+                    "arn": "arn:aws:s3:::data.madronus.com"
+                },
+                "object": {
+                    "key": "landcollect/uploads/sample1_orig_.heic",
+                    "size": 1861062,
+                    "eTag": "8d2d6654f13412caca084fafa40e18ab",
+                    "sequencer": "00645D0B41AAE64F5C"
+                }
+            }
+        }
+    ]
+}
