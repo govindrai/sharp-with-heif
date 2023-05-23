@@ -2,6 +2,10 @@ FROM public.ecr.aws/lambda/nodejs:18
 
 WORKDIR /madronus/build
 
+ARG LIBDE265_VERSION=1.0.11
+ENV LIBDE265_VERSION=$LIBDE265_VERSION
+ARG LIBHEIF_VERSION=1.16.1
+ENV LIBHEIF_VERSION=$LIBHEIF_VERSION
 ARG VIPS_VERSION=8.14.2
 ENV VIPS_VERSION=$VIPS_VERSION
 ENV LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64:$LD_LIBRARY_PATH
@@ -14,7 +18,6 @@ RUN yum -y update && \
     pip3 install cmake meson && \
     npm i -g node-gyp
 
-# Install libwep since image repo version is too low 
 RUN git clone https://chromium.googlesource.com/webm/libwebp && \
     cd libwebp && \
     ./autogen.sh && \
@@ -28,9 +31,9 @@ RUN git clone https://bitbucket.org/multicoreware/x265_git.git && \
     make && \
     make install
 
-RUN curl -L https://github.com/strukturag/libde265/releases/download/v1.0.11/libde265-1.0.11.tar.gz | \
+RUN curl -L https://github.com/strukturag/libde265/releases/download/v${LIBDE265_VERSION}/libde265-${LIBDE265_VERSION}.tar.gz | \
     tar zx && \
-    cd libde265-1.0.11 && \
+    cd libde265-${LIBDE265_VERSION} && \
     ./autogen.sh && \
     ./configure && \
     mkdir build && \
@@ -39,10 +42,9 @@ RUN curl -L https://github.com/strukturag/libde265/releases/download/v1.0.11/lib
     make && \
     make install
 
-
-RUN curl -L https://github.com/strukturag/libheif/releases/download/v1.16.1/libheif-1.16.1.tar.gz | \
+RUN curl -L https://github.com/strukturag/libheif/releases/download/v${LIBHEIF_VERSION}/libheif-${LIBHEIF_VERSION}.tar.gz | \
     tar zx && \
-    cd libheif-1.16.1 && \
+    cd libheif-${LIBHEIF_VERSION} && \
     mkdir build && \
     cd build && \
     cmake --preset=release .. && \
@@ -62,13 +64,11 @@ RUN curl -L https://github.com/libvips/libvips/releases/download/v${VIPS_VERSION
     meson test && \
     meson install
 
-
 WORKDIR ${LAMBDA_TASK_ROOT}
 
 # Copy function code
 COPY package.json .
 RUN npm install --verbose --foreground-scripts
-RUN pwd
 COPY . .
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
@@ -77,14 +77,9 @@ CMD [ "index.handler" ]
 
 # building instructions
 # docker build -t --progress plain sharp:test .
-# need to debug? this will run all steps without cache
-# docker build --progress plain --no-cache -t sharp:test .
-# you can also comment out all steps except from the first step and run
-# these manually on container so that you don't need to run everything over 
-# and over again and can play around in the container
 
 # running instructions
-# docker rm -f stupid-container && docker run -d --name stupid-container sharp:test && docker exec -it stupid-container npm test
+# docker rm -f sharp-container && docker run -d --name sharp-container sharp:test && docker exec -it sharp-container npm test
 
 # one-liner to build and run 
-# docker build --progress plain -t sharp:test . && docker rm -f stupid-container && docker run -d --name stupid-container sharp:test && docker exec -it stupid-container npm test
+# docker build --progress plain -t sharp:test . && docker rm -f sharp-container && docker run -d --name sharp-container sharp:test && docker exec -it sharp-container npm test
