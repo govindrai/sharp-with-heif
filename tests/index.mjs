@@ -14,6 +14,7 @@ async function mini_test() {
 
     const resizedImageBuffer = await sharp(imageBuffer)
         .resize({ width: 960, height: 960, fit: 'inside' })
+        .heif({ compression: 'hevc' })
         .toBuffer();
 
     fs.writeFileSync(path.join(__dirname, filename), resizedImageBuffer)
